@@ -1,0 +1,1 @@
+The 4 subfolders in this directory contains the different types of output that PCLRealSenseGrabber produce.
