@@ -1,6 +1,8 @@
 # README #
 [Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
+[Markdown-TOC](http://doctoc.herokuapp.com/)
+
 This repository contains small programs and code collection that can be of use when working on computer vision projects in either c++ or python.
 
 ## Usage ##
