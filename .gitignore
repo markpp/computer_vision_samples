@@ -1,0 +1,8 @@
+
+*.pcd
+
+cpp/PCLCluster/bin
+
+cpp/PCLVisualizer/bin
+
+cpp/PointCloudVisualizerXYZRGB_filter/bin
