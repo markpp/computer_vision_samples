@@ -6,7 +6,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "../defines.hpp"
+#include "../../defines.hpp"
 
 class Settings {
 public:

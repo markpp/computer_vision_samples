@@ -68,7 +68,7 @@ int main (int argc, char ** argv)
       }
 
       // Remove extreme points from point cloud in preparation for segmentation
-      filters.pass_through(cloud_xyzrgb_ptr, cloud_xyzrgb_filtered_ptr, Settings.zmin, Settings.zmax, Settings.xmin, Settings.xmax, Settings.ymin, Settings.ymax);
+      filters.pass_through(cloud_xyzrgb_ptr, cloud_xyzrgb_filtered_ptr, 0.5, 1.5, 0.0, 0.4, -0.5, 1.5);
     }
     // Check if settings have been changed and new computations are necessary
     if(Settings.settingsUpdated || Settings.newPointCloud)

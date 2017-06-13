@@ -14,7 +14,7 @@ std::string FeatureExtractor::ZeroPadNumber(int num)
 void FeatureExtractor::openOutputStream(int counter)
 {
     featureOutputStreamString = std::stringstream();
-    featureOutputStreamString << "../output/features/features_" << ZeroPadNumber(counter) << ".txt";
+    featureOutputStreamString << "features_" << ZeroPadNumber(counter) << ".txt";
     featurePath = featureOutputStreamString.str();
     std::cout << featurePath << std::endl;
     featureOutputStream.open(featurePath);

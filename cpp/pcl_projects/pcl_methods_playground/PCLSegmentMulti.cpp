@@ -14,29 +14,29 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#import "../src/defines.hpp"
+#import "defines.hpp"
 
-#include "../src/Filters/PassThrough.hpp"
-#include "../src/Filters/Smoothing.hpp"
+#include "src/Filters/PassThrough.hpp"
+#include "src/Filters/Smoothing.hpp"
 
-#include "../src/Segmentation/RGS.hpp"
-#include "../src/Segmentation/CRGS.hpp"
-#include "../src/Segmentation/SVC.hpp"
-#include "../src/Segmentation/LCCP.hpp"
-#include "../src/Segmentation/CPC.hpp"
+#include "src/Segmentation/RGS.hpp"
+#include "src/Segmentation/CRGS.hpp"
+#include "src/Segmentation/SVC.hpp"
+#include "src/Segmentation/LCCP.hpp"
+#include "src/Segmentation/CPC.hpp"
 
-#include "../src/Presentation/Normals.hpp"
-#include "../src/Presentation/PrincipalCurves.hpp"
-#include "../src/Presentation/ColorCoding/DepthCoding.hpp"
-#include "../src/Presentation/ColorCoding/NormalCoding.hpp"
-#include "../src/Presentation/Settings.hpp"
-#include "../src/Presentation/Graphics.hpp"
+#include "src/Presentation/Normals.hpp"
+#include "src/Presentation/PrincipalCurves.hpp"
+#include "src/Presentation/ColorCoding/DepthCoding.hpp"
+#include "src/Presentation/ColorCoding/NormalCoding.hpp"
+#include "src/Presentation/Settings.hpp"
+#include "src/Presentation/Graphics.hpp"
 
 //#include "../src/Registration/NDT.hpp"
 //#include "../src/Registration/ICP.hpp"
 
-#include "../src/Conversion/NormalMap.hpp"
-#include "../src/Conversion/Conversion.hpp"
+#include "src/conversion/NormalMap.hpp"
+#include "src/conversion/Conversion.hpp"
 
 #include <string>
 #include <iostream>
@@ -88,9 +88,9 @@ int main ()
   while (!viewer->wasStopped ())
   {
     //Users/markpp/Desktop/code/data/DanpoData/CENTER_B/COLOR_PC/COLOR_PC_BIN_0_C_B.pcd 
-    path = "/Users/markpp/Desktop/code/data/DanpoData/CENTER_A/COLOR_PC/COLOR_PC_BIN_" + std::to_string(frameCounter) + "_C_A.pcd";
+    path = "cloud_0001.pcd";
     //path2 = "/Users/markpp/Desktop/code/data/SecondDanpoCapture/right/pointcloud/PC_BIN_" + std::to_string(frameCounter) + "_A.pcd";
-    imgpath = "/Users/markpp/Desktop/code/data/DanpoData/CENTER_A/MAPPED_COLOR/MAPPED_COLOR_" + std::to_string(frameCounter) + "_C_A.png";
+    imgpath = "img_0001.png";
     /*
     if(frameCounter%2==0)
     {
@@ -125,7 +125,7 @@ int main ()
     //pcl::copyPointCloud(*cloud_xyzrgb, *cloud_xyz);
 
     std::cout << "PointCloud " + std::to_string(frameCounter) + " has: " << cloud_xyzrgb->points.size() << " data points. Height: " << cloud_xyzrgb->height << " width: " << cloud_xyzrgb->width << std::endl;
-    PassThrough.filter(cloud_xyzrgb, cloud_xyzrgb_filtered_ptr, Settings.zmin, Settings.zmax, Settings.xmin, Settings.xmax, Settings.ymin, Settings.ymax);
+    PassThrough.filter(cloud_xyzrgb, cloud_xyzrgb_filtered_ptr, 0.5, 1.5, 0.0, 0.4, -0.5, 1.5);
     std::cout << "PointCloud " + std::to_string(frameCounter) + " After filtering, Height: " << cloud_xyzrgb_filtered_ptr->height << " width: " << cloud_xyzrgb_filtered_ptr->width << std::endl;
     //PassThrough.filter(cloud_xyzrgb_r, cloud_xyzrgb_filtered_r_ptr, Settings.zmin, Settings.zmax, Settings.xmin, Settings.xmax, Settings.ymin, Settings.ymax);
 

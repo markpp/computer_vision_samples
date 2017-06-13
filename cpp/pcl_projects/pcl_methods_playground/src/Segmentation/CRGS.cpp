@@ -15,9 +15,9 @@ void CRGS::segmentPC(pcl::PointCloud <pcl::PointXYZRGB>::Ptr inputPC)
   pcl::RegionGrowingRGB<pcl::PointXYZRGB> reg;
   reg.setInputCloud (inputPC);
   reg.setSearchMethod (tree);
-  reg.setDistanceThreshold (4);
-  reg.setPointColorThreshold (5);
-  reg.setRegionColorThreshold (6);
+  reg.setDistanceThreshold (6);
+  reg.setPointColorThreshold (6);
+  reg.setRegionColorThreshold (7);
   reg.setMinClusterSize (800);
 
   std::vector <pcl::PointIndices> clusters;
