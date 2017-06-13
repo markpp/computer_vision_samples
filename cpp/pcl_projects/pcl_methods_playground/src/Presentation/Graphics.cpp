@@ -1,22 +1,36 @@
 #include "Graphics.hpp"
 
-Graphics::Graphics()
-{
-}
+Graphics::Graphics(){}
 
-boost::shared_ptr<pcl::visualization::PCLVisualizer> Graphics::initViewer()
+boost::shared_ptr<pcl::visualization::PCLVisualizer> Graphics::initViewer(float pos_x,
+                                                                          float pos_y,
+                                                                          float pos_z,
+                                                                          float view_x,
+                                                                          float view_y,
+                                                                          float view_z,
+                                                                          float up_x,
+                                                                          float up_y,
+                                                                          float up_z)
 {
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+  //viewer->setBackgroundColor (255, 255, 255);
   viewer->setBackgroundColor (0, 0, 0);
   //viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "cloud");
-  //viewer->addCoordinateSystem (0.01);
+  //x=red axis, y=green axis, z=blue
+  viewer->addCoordinateSystem (0.05, 0.0, 0.0, 0.0);
   viewer->initCameraParameters ();
 
-  // adding sphere, useful for seeing what the viewer i centering on
-  pcl::PointXYZ FocusPoint;
-  FocusPoint.x=0.0; FocusPoint.y=0.0; FocusPoint.z=0.4;
-  //viewer->addSphere (FocusPoint,0.01,"sp");
-  viewer->setCameraPosition(0.0, 0.0, -0.2, 0.0, 0.0, FocusPoint.z, 0.0, 1.0, 0.0); // cam in z = -0.2, focus on z = 0.2
+  viewer->setCameraPosition(pos_x, pos_y, pos_z, view_x, view_y, view_z, up_x, up_y, up_z);
+
+  std::vector<pcl::visualization::Camera> cam;
+  //Save the position of the camera
+  viewer->getCameras(cam);
+  //Print recorded points on the screen:
+  cout << "Cam: " << endl
+       << " - pos: ("   << cam[0].pos[0]   << ", "  << cam[0].pos[1]   << ", "  << cam[0].pos[2]   << ")" << endl
+       << " - view: ("  << cam[0].view[0]  << ", "  << cam[0].view[1]  << ", "  << cam[0].view[2]  << ")" << endl
+       << " - focal: (" << cam[0].focal[0] << ", "  << cam[0].focal[1] << ", "  << cam[0].focal[2] << ")" << endl;
+
   return (viewer);
 }
 

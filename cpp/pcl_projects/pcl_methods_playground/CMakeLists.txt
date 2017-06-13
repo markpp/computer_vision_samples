@@ -21,8 +21,7 @@ add_executable (PCLSegmentMulti
                 src/Segmentation/CPC.cpp
                 src/Conversion/Conversion.cpp
                 src/Conversion/NormalMap.cpp
-                src/Filters/PassThrough.cpp
-                src/Filters/Smoothing.cpp
+                src/filters/filters.cpp
                 src/Presentation/ColorCoding/DepthCoding.cpp
                 src/Presentation/ColorCoding/NormalCoding.cpp
                 src/Presentation/Normals.cpp
