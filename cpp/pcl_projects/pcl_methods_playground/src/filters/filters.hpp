@@ -12,19 +12,19 @@
 #include <pcl/surface/mls.h>
 #include <pcl/io/ply_io.h>
 
-#include "../defines.hpp"
+#include "../../defines.hpp"
 
 class Filters {
 public:
   Filters();
-  void pass_through(pcl::PointCloud <PointT>::Ptr, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
-  void medianFilter(pcl::PointCloud <PointT>::Ptr, int);
-  void MLS_smoothing(pcl::PointCloud <PointT>::Ptr, float);
+  void pass_through(pcl::PointCloud <pcl::PointXYZRGB>::Ptr, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
+  void medianFilter(pcl::PointCloud <pcl::PointXYZRGB>::Ptr, int);
+  void MLS_smoothing(pcl::PointCloud <pcl::PointXYZRGB>::Ptr, float);
 
-  pcl::PointCloud<PointT>::Ptr filtered_cloud_ptr;
-  pcl::PointCloud<PointT>::Ptr smoothed_median_cloud_ptr;
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr filtered_cloud_ptr;
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr smoothed_median_cloud_ptr;
   pcl::PointCloud<pcl::PointXYZRGBNormal>::Ptr smoothed_MLS_normal_cloud_ptr;
-  pcl::PointCloud<PointT>::Ptr smoothed_MLS_cloud_ptr;
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr smoothed_MLS_cloud_ptr;
 private:
 
 };

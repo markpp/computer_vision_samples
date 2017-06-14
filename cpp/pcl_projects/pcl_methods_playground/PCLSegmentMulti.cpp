@@ -38,7 +38,7 @@ bool quitBool = false;
 int frameCounter = 0;
 
 std::vector<std::string> modeNames = {"PassThroughMode", "smoothingMode", "NormalsMode", "CRGSMode", "RGSMode", "colorDepthMode", "SVCMode", "LCCPMode", "CPCMode"};
-int modeCode = PassThroughMode;
+int modeCode = NormalsMode;
 
 int main ( int argc, char** argv )
 {
@@ -60,12 +60,11 @@ int main ( int argc, char** argv )
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyzrgb (new pcl::PointCloud<pcl::PointXYZRGB>);
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_xyzrgb_filtered_ptr (new pcl::PointCloud<pcl::PointXYZRGB>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_xyz_f (new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud_xyzrgba_ptr (new pcl::PointCloud<pcl::PointXYZRGBA>);
 
   boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
   viewer = graphics.initViewer(0.0, 0.05, -0.5, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0);
 
-  std::string path, path2, imgpath;
+  std::string cloud_path, img_path;
   cv::Mat img;
   while (!viewer->wasStopped ())
   {
@@ -78,7 +77,7 @@ int main ( int argc, char** argv )
     cv::putText(img, setnumber, cv::Point(40,40), CV_FONT_HERSHEY_PLAIN, 2, cv::Scalar::all(255), 3,3);
     cv::imshow("mapped", umat);
 
-    if (pcl::io::loadPCDFile<pcl::PointXYZRGB> (cloud_path, *cloud_xyzrgba_ptr) == -1) // load the file
+    if (pcl::io::loadPCDFile<pcl::PointXYZRGB> (cloud_path, *cloud_xyzrgb) == -1) // load the file
     {
       PCL_ERROR ("Couldn't read file test_pcd.pcd \n");
       return (-1);
@@ -86,15 +85,16 @@ int main ( int argc, char** argv )
     //Convert from PointXYZRGB to PointXYZ
     //pcl::copyPointCloud(*cloud_xyzrgb, *cloud_xyz);
     filters.pass_through(cloud_xyzrgb,
-                         0.0, 0.4,
-                         -0.5, 1.5,
-                         0.5, 1.5);
+                         -0.5, 0.5,
+                         -1.5, 1.5,
+                         -1.5, 1.5);
     cloud_xyzrgb_filtered_ptr = filters.filtered_cloud_ptr;
 
     while (!viewer->wasStopped ())
     {
       if(update)
       {
+        // Processing cases
         if(modeCode%numModes == smoothingMode || modeCode%numModes == NormalsMode) // 1 = median smoothing
         {
           if((modeCode%numModes == smoothingMode && Settings.smoothingFilterSwitch == Settings::MLS) || (modeCode%numModes == NormalsMode && Settings.normalPreprocessingSwitch == Settings::SMOOTHED))
@@ -104,7 +104,7 @@ int main ( int argc, char** argv )
           }
           else if(Settings.smoothingFilterSwitch == Settings::median)
           {
-            filters.medianFilter(cloud_xyzrgba_ptr, Settings.median_windowSize);
+            filters.medianFilter(cloud_xyzrgb_filtered_ptr, Settings.median_windowSize);
             std::cout << "MedianFiltered" << std::endl;
           }
         }
@@ -115,15 +115,15 @@ int main ( int argc, char** argv )
             std::cout << "NONSMOOTHED" << std::endl;
             //With noisy normals
             Normals.generateNormals(cloud_xyzrgb_filtered_ptr, Settings.normalSearchRadius);
-            Conversion.appendNormals(cloud_xyzrgb_filtered_ptr, Normals.normals_ptr);
-            NormalCoding.colorNormals(Conversion.cloud_normals_ptr, Settings.normalColorMapModeSwitch);
+            conversion.appendNormals(cloud_xyzrgb_filtered_ptr, Normals.normals_ptr);
+            NormalCoding.colorNormals(conversion.cloud_normals_ptr, Settings.normalColorMapModeSwitch);
           }
           else if((modeCode%numModes == NormalsMode && Settings.normalPreprocessingSwitch == Settings::SMOOTHED) && modeCode%numModes != RGSMode)
           {
             std::cout << "SMOOTHED" << std::endl;
             Normals.generateNormals(filters.smoothed_MLS_cloud_ptr, Settings.normalSearchRadius);
-            Conversion.appendNormals(filters.smoothed_MLS_cloud_ptr, Normals.normals_ptr);
-            NormalCoding.colorNormals(Conversion.cloud_normals_ptr, Settings.normalColorMapModeSwitch);
+            conversion.appendNormals(filters.smoothed_MLS_cloud_ptr, Normals.normals_ptr);
+            NormalCoding.colorNormals(conversion.cloud_normals_ptr, Settings.normalColorMapModeSwitch);
           }
         }
         if(modeCode%numModes == CRGSMode) // 1 = colored segmentation
@@ -187,14 +187,14 @@ int main ( int argc, char** argv )
         }
         if(viewer->contains("z_plane"))
         {
-          Graphics.removeBoundary_z(viewer);
+          graphics.removeBoundary_z(viewer);
         }
         if(viewer->contains("y_plane"))
         {
-          Graphics.removeBoundary_y(viewer);
+          graphics.removeBoundary_y(viewer);
         }
-        Graphics.drawBoundary_z(viewer, 0.05, Settings.zmax);
-        Graphics.drawBoundary_y(viewer, 0.05, Settings.ymax);
+        graphics.drawBoundary_z(viewer, 0.05, Settings.zmax);
+        graphics.drawBoundary_y(viewer, 0.05, Settings.ymax);
       }
       else if(modeCode%numModes == CRGSMode)
       {
@@ -435,8 +435,8 @@ int main ( int argc, char** argv )
         Settings.resetWindow();
         if(modeCode%numModes == PassThroughMode)
         {
-          Graphics.removeBoundary_z(viewer);
-          Graphics.removeBoundary_y(viewer);
+          graphics.removeBoundary_z(viewer);
+          graphics.removeBoundary_y(viewer);
         }
         modeCode++;
         update = true;
@@ -446,8 +446,8 @@ int main ( int argc, char** argv )
         Settings.resetWindow();
         if(modeCode%numModes == PassThroughMode)
         {
-          Graphics.removeBoundary_z(viewer);
-          Graphics.removeBoundary_y(viewer);
+          graphics.removeBoundary_z(viewer);
+          graphics.removeBoundary_y(viewer);
         }
         //colorCoded = !colorCoded;
         modeCode--;
