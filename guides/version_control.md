@@ -2,6 +2,7 @@ Getting github desktop for linux
 
 
 dependencies
+sudo apt-get install libxss1 libappindicator1 libindicator7
 
 
 Download newest .deb https://github.com/gengjiawen/desktop/releases
